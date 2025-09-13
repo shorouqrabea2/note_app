@@ -7,7 +7,7 @@ class GetNotesInitialState extends GetNotesStates {}
 class GetNotesLoadingState extends GetNotesStates {}
 
 class GetNotesSuccessState extends GetNotesStates {
-  List <CreateNoteModel> notes;
+  List<NoteModel> notes;
   GetNotesSuccessState({required this.notes});
 }
 

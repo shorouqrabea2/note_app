@@ -1,7 +1,9 @@
+import 'package:firebase_project/core/utils/colors_manager.dart';
 import 'package:firebase_project/logic/login/cubit.dart';
 import 'package:firebase_project/logic/login/state.dart';
 import 'package:firebase_project/presentation/screens/home_screen.dart';
 import 'package:firebase_project/presentation/screens/signup.dart';
+import 'package:firebase_project/presentation/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +21,7 @@ class Login extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text("Successfully"),
-                backgroundColor: Color(0xff4E55D7),
+                backgroundColor: ColorsManager.primary,
               ),
             );
             Navigator.pushReplacement(
@@ -35,7 +37,7 @@ class Login extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage),
-                backgroundColor: Color(0xff4E55D7),
+                backgroundColor: ColorsManager.primary,
               ),
             );
           }
@@ -158,39 +160,20 @@ class Login extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: "Inter",
-                          color: Color(0xff648DDB),
+                          color: ColorsManager.primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
+                    AppButton(
+                      function: () {
                         context.read<LoginCubit>().login(
                           email: emailController.text,
                           password: passwordController.text,
                         );
                       },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 175,
-                          vertical: 16,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0xff4E55D7),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: (state is LoginLoadingState)
-                            ? Center(child: CircularProgressIndicator())
-                            : Text(
-                                "Continue",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontFamily: "OpenSans",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                      ),
+                      text: "Continue",
+                      loadingState: (state is LoginLoadingState ),
                     ),
                     SizedBox(height: 10),
                     Row(
@@ -295,7 +278,7 @@ class Login extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 23,
                               fontFamily: "OpenSans",
-                              color: Color(0xff648DDB),
+                              color: ColorsManager.primary,
                             ),
                           ),
                         ),

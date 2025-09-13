@@ -1,9 +1,9 @@
-class CreateNoteModel {
+class NoteModel {
   final String headline;
   final String description;
   final DateTime createdAt;
 
-  CreateNoteModel({
+  NoteModel({
     required this.headline,
     required this.description,
     required this.createdAt,
@@ -17,11 +17,11 @@ class CreateNoteModel {
     };
   }
 
-  factory CreateNoteModel.fromJson(Map<String, dynamic> json) {
-    return CreateNoteModel(
+  factory NoteModel.fromJson(Map<String, dynamic> json) {
+    return NoteModel(
       headline: json['headline'] as String,
       description: json['description'] as String,
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
 }

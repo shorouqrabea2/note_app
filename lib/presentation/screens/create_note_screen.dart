@@ -1,7 +1,9 @@
+import 'package:firebase_project/core/utils/colors_manager.dart';
 import 'package:firebase_project/data/note_model/note_model.dart';
 import 'package:firebase_project/logic/create_note/cubit.dart';
 import 'package:firebase_project/logic/create_note/state.dart';
 import 'package:firebase_project/presentation/screens/home_screen.dart';
+import 'package:firebase_project/presentation/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +28,7 @@ class NoteScreen extends StatelessWidget {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => HomeScreen()),
-              (route)=>false
+              (route) => false,
             );
           } else if (state is CreateNoteErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -98,56 +100,37 @@ class NoteScreen extends StatelessWidget {
                     SizedBox(height: 100),
                     Center(
                       child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 135,
-                        ),
+                        width: double.infinity,
+                        height: 80,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadiusDirectional.circular(10),
-                          color: Color(0xff4E55D7),
+                          borderRadius: BorderRadiusDirectional.circular(16),
+                          color: ColorsManager.primary
                         ),
-                        child: Text(
-                          "Select Media",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
+                        child: Center(
+                          child: Text(
+                            "Select Media",
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontFamily: "OpenSans",
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
+                    AppButton(
+                      function: () {
                         context.read<CreateNoteCubit>().createNote(
-                          CreateNoteModel(
+                          NoteModel(
                             headline: headlineController.text,
                             description: descriptionController.text,
                             createdAt: DateTime.now(),
                           ),
                         );
                       },
-                      child: Center(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 165,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.circular(10),
-                            color: Color(0xff4E55D7),
-                          ),
-                          child: (state is CreateNoteLoadingState)
-                              ? Center(child: CircularProgressIndicator())
-                              : Text(
-                                  "Create",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                        ),
-                      ),
+                      text: "Create",
+                      loadingState: (state is CreateNoteLoadingState),
                     ),
                   ],
                 ),

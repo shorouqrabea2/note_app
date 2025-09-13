@@ -7,7 +7,7 @@ class CreateNoteCubit extends Cubit<CreateNoteStates> {
   CreateNoteCubit() : super(CreateNoteInitialState());
 
   /// create note in firebasefire store
-  Future createNote(CreateNoteModel createNoteModel) async {
+  Future createNote(NoteModel createNoteModel) async {
     emit(CreateNoteLoadingState());
     try {
       await FirebaseFirestore.instance

@@ -5,6 +5,7 @@ import 'package:firebase_project/logic/login/cubit.dart';
 import 'package:firebase_project/logic/login/state.dart';
 import 'package:firebase_project/presentation/screens/create_note_screen.dart';
 import 'package:firebase_project/presentation/screens/login.dart';
+import 'package:firebase_project/presentation/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,127 +22,89 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 80, left: 16, right: 16),
             child: Column(
               children: [
-                Row(
-                  spacing: 20,
-                  children: [
-                    // زرار إضافة Note
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => NoteScreen()),
-                        );
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 50),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 50,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xff4E55D7),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Text(
-                          "Add Note",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 90),
+                  child: Row(
+                    spacing: 20,
+                    children: [
+                      AppButton(
+                        function: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NoteScreen(),
+                            ),
+                          );
+                        },
+                        text: "Add Note",
+                        width: 150,
                       ),
-                    ),
-
-                    // زرار تسجيل الخروج
-                    InkWell(
-                      onTap: () async {
-                        await FirebaseAuth.instance.signOut();
-                        context.read<LoginCubit>().saveScreen(
-                              LoginSuccessState(homeScreen: false),
-                            );
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => Login()),
-                          (route) => false,
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 50,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xff4E55D7),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Text(
-                          "Log Out",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                      AppButton(
+                        function: () async {
+                          await FirebaseAuth.instance.signOut();
+                          LoginCubit().saveScreen(
+                            LoginSuccessState(homeScreen: false),
+                          );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => Login()),
+                          );
+                        },
+                        text: "Log out",
+                        width: 150,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30),
 
-                // BlocBuilder لعرض النوتس
                 BlocBuilder<GetNotesCubit, GetNotesStates>(
                   builder: (context, state) {
                     if (state is GetNotesLoadingState) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is GetNotesSuccessState) {
-                      return Expanded(
-                        child: ListView.builder(
-                          itemCount: state.notes.length,
-                          itemBuilder: (context, index) {
-                            final note = state.notes[index];
-                            return Card(
-                              margin: const EdgeInsets.only(top: 16),
-                              color: Colors.grey.shade200,
-                              child: Padding(
-                                padding: const EdgeInsets.all(30),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      note.headline,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            note.description,
-                                            style: const TextStyle(fontSize: 16),
-                                          ),
-                                        ),
-                                        Text(
-                                          note.createdAt.toString(),
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    } else if (state is GetNotesErrorState) {
-                      return const Center(
-                        child: Text("Failed to load notes"),
-                      );
+                      return Lottie.asset("");
                     }
-                    return const SizedBox.shrink();
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: 20,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            margin: EdgeInsets.only(top: 16),
+                            color: Colors.grey.shade200,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 40,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Meeting",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Excepteur sint occaecat cupidatat non proiden.",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        "9:00 am",
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
                   },
                 ),
               ],

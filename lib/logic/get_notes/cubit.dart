@@ -6,19 +6,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GetNotesCubit extends Cubit<GetNotesStates> {
   GetNotesCubit() : super(GetNotesInitialState());
 
-  /// get notes from firebasefire store
+  /// function to get notes from firebase firestore
   Future getNotes() async {
     emit(GetNotesLoadingState());
     try {
       final response = await FirebaseFirestore.instance
           .collection("Notes")
-          .get();
-          final notes=response.docs.map((doc)=> CreateNoteModel.fromJson(doc.data())).toList();
-          emit(GetNotesSuccessState(notes: notes));
+          .get(); // docs
+      // save in model => convert ()iterable to list[obj,obj,..]
+      final notesList = response.docs
+          .map((doc) => NoteModel.fromJson(doc.data()))
+          .toList();
+      emit(GetNotesSuccessState(notes: notesList));
     } catch (e) {
       emit(GetNotesErrorState(errorMessage: e.toString()));
     }
   }
 }
-
-// list=[ob1,ob2,...]
